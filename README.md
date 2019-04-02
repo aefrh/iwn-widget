@@ -1,6 +1,6 @@
 # IWN
 
-![Screenshot](/Screenshot.png)
+![Screenshot](/screenshot.png)
 
 IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the left corner of the desktop.
 
