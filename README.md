@@ -2,7 +2,18 @@
 
 ![Screenshot](/screenshot.png)
 
-IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the bottom left corner of the desktop.
+IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the bottom left corner of the desktop. The location is automatically set to the location of the computer.
+
+## Installation
+
+1. Download [Übersicht](http://tracesof.net/uebersicht/)
+2. Copy `iwn.widget` to your widgets folder.
+3. Sign up to [Dark Sky API](https://darksky.net/dev) and add the obtained api-key in `iwn.coffee`.
+
+## Customization
+
+* The temperature unit can be changed from °C to °F by changing `unit: 'c'` to `unit: 'f'` in `iwn.coffee`.
+* The widgets updates every 5 minutes. This can be changed by changing `time: 5` in `iwn.coffee`. The time is given in minutes. Note that a free Dark Sky API-key allows 1,000 calls per day.
 
 ## Credit & Licences
 The design of IWN is heavily inspired by the [Weather Now Widget](https://github.com/briandconnelly/weathernow-widget) by [Brian Connelly](https://github.com/briandconnelly)<br/>
