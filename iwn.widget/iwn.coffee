@@ -7,11 +7,10 @@ apiKey: '<api-key>'
 unit: 'c'
 
 # refresh every x minutes
-time: 5
+refreshFrequency: '5min'
 
 # ---------------------------- END CONFIG ----------------------------
 
-refreshFrequency: 60000 * @time
 exclude: "minutely,hourly,alerts,flags"
 command: "echo {}"
 
