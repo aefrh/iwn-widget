@@ -65,7 +65,7 @@ style: """
 		font-family Weather
 		src url(iwn.widget/icons.svg) format('svg')
 	#left
-		padding-left: 70px
+		padding-left 70px
 	#temp
 		font-size 2em
 	#condition
