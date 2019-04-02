@@ -2,7 +2,7 @@
 
 ![Screenshot](/screenshot.png)
 
-IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the left corner of the desktop.
+IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the bottom left corner of the desktop.
 
 ## Credit & Licences
 The design of IWN is heavily inspired by the [Weather Now Widget](https://github.com/briandconnelly/weathernow-widget) by [Brian Connelly](https://github.com/briandconnelly)<br/>
