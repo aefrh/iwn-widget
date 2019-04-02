@@ -11,7 +11,7 @@ time: 5
 
 # ---------------------------- END CONFIG ----------------------------
 
-refreshFrequency: 6000 * @time
+refreshFrequency: 60000 * @time
 exclude: "minutely,hourly,alerts,flags"
 command: "echo {}"
 
