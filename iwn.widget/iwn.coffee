@@ -11,7 +11,7 @@ refreshFrequency: '5min'
 
 # ---------------------------- END CONFIG ----------------------------
 
-exclude: "minutely,hourly,alerts,flags"
+exclude: "minutely,hourly,daily,alerts,flags"
 command: "echo {}"
 
 makeCommand: (apiKey, location) ->
@@ -56,7 +56,7 @@ style: """
 	width 25%
 	bottom 3%
 	left 1%
-	font-family Futura
+	font-family Avenir Next LT Pro, Futura
 	font-smooth always
 	color rgba(255,255,255,0.4)
 
@@ -81,12 +81,12 @@ iconMapping:
 	"snow"                :"&#xf01b;"
 	"fog"                 :"&#xf014;"
 	"cloudy"              :"&#xf013;"
-	"wind"                :"&#xf021;"
+	"wind"                :"&#xf050;"
 	"clear-day"           :"&#xf00d;"
 	"mostly-clear-day"    :"&#xf00c;"
 	"partly-cloudy-day"   :"&#xf002;"
 	"clear-night"         :"&#xf02e;"
-	"partly-cloudy-night" :"&#xf031;"
+	"partly-cloudy-night" :"&#xf086;"
 	"unknown"             :"&#xf03e;"
 
 getIcon: (data) ->
