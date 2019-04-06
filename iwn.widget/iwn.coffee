@@ -88,6 +88,20 @@ iconMapping:
 	"clear-night"         :"&#xf02e;"
 	"partly-cloudy-night" :"&#xf086;"
 	"unknown"             :"&#xf03e;"
+	"sleet"               :"&#xf0b5;"
+	"hail"                :"&#xf03e;"
+	"thunderstorm"        :"&#xf03e;"
+	"tornado"             :"&#xf03e;"
+	"wind3"               :"&#xf0ba;"
+	"wind4"               :"&#xf0bb;"
+	"wind5"               :"&#xf0bc;"
+	"wind6"               :"&#xf0bd;"
+	"wind7"               :"&#xf0be;"
+	"wind8"               :"&#xf0bf;"
+	"wind9"               :"&#xf0c0;"
+	"wind10"              :"&#xf0c1;"
+	"wind11"              :"&#xf0c2;"
+	"wind12"              :"&#xf0c3;"
 
 getIcon: (data) ->
 		return @iconMapping['unknown'] unless data
@@ -100,5 +114,26 @@ getIcon: (data) ->
 				@iconMapping["partly-cloudy-day"]
 			else
 				@iconMapping["cloudy"]
+    if data.icon.indexOf('wind') > -1
+      if data.windSpeed > 32.7
+        @iconMapping["wind12"]
+      else if data.windSpeed > 28.5
+        @iconMapping["wind11"]
+      else if data.windSpeed > 24.5
+        @iconMapping["wind10"]
+      else if data.windSpeed > 20.8
+        @iconMapping["wind9"]
+      else if data.windSpeed > 17.2
+        @iconMapping["wind8"]
+      else if data.windSpeed > 13.9
+        @iconMapping["wind7"]
+      else if data.windSpeed > 10.8
+        @iconMapping["wind6"]
+      else if data.windSpeed > 8
+        @iconMapping["wind5"]
+      else if data.windSpeed > 5.5
+        @iconMapping["wind4"]
+      else if data.windSpeed > 3.4
+        @iconMapping["wind3"]
 		else
 			@iconMapping[data.icon]
