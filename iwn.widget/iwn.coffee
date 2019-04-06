@@ -114,26 +114,26 @@ getIcon: (data) ->
 				@iconMapping["partly-cloudy-day"]
 			else
 				@iconMapping["cloudy"]
-    if data.icon.indexOf('wind') > -1
-      if data.windSpeed > 32.7
-        @iconMapping["wind12"]
-      else if data.windSpeed > 28.5
-        @iconMapping["wind11"]
-      else if data.windSpeed > 24.5
-        @iconMapping["wind10"]
-      else if data.windSpeed > 20.8
-        @iconMapping["wind9"]
-      else if data.windSpeed > 17.2
-        @iconMapping["wind8"]
-      else if data.windSpeed > 13.9
-        @iconMapping["wind7"]
-      else if data.windSpeed > 10.8
-        @iconMapping["wind6"]
-      else if data.windSpeed > 8
-        @iconMapping["wind5"]
-      else if data.windSpeed > 5.5
-        @iconMapping["wind4"]
-      else if data.windSpeed > 3.4
-        @iconMapping["wind3"]
+		if data.icon.indexOf('wind') > -1
+			if data.windSpeed > 32.7
+				 @iconMapping["wind12"]
+			else if data.windSpeed > 28.5
+				@iconMapping["wind11"]
+			else if data.windSpeed > 24.5
+				@iconMapping["wind10"]
+			else if data.windSpeed > 20.8
+				@iconMapping["wind9"]
+			else if data.windSpeed > 17.2
+				@iconMapping["wind8"]
+			else if data.windSpeed > 13.9
+				@iconMapping["wind7"]
+			else if data.windSpeed > 10.8
+				@iconMapping["wind6"]
+			else if data.windSpeed > 8
+				@iconMapping["wind5"]
+			else if data.windSpeed > 5.5
+				@iconMapping["wind4"]
+			else if data.windSpeed > 3.4
+				@iconMapping["wind3"]
 		else
 			@iconMapping[data.icon]
