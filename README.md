@@ -1,6 +1,6 @@
 # IWN
 
-![Screenshot](/screenshot.png)
+![Screenshot](/screenshot.png) ![Screenshot](/screenshot-2.png)
 
 IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/) displaying the current temperature and conditions in the bottom left corner of the desktop. The location is automatically set to the location of the computer.
 
@@ -13,6 +13,7 @@ IWN is a simple weather widget for [Übersicht](http://tracesof.net/uebersicht/)
 ## Customization
 
 * The temperature unit can be changed from °C to °F by changing `unit: 'c'` to `unit: 'f'` in `iwn.coffee`.
+* A small icon shows the Beaufort number if it is 3 (gentle breeze) or above. This can be deactivated by changing `windscale: 'yes'` to `windscale: 'no'` in `iwn.coffee`.
 * The widgets updates every 5 minutes. This can be changed by changing `refreshFrequency: '5min'` in `iwn.coffee`. The time is given in minutes. Note that a free Dark Sky API-key allows 1,000 calls per day.
 
 ## Credit & Licences
