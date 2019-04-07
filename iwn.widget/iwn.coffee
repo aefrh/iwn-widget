@@ -9,17 +9,22 @@ unit: 'c'
 # refresh every x minutes
 refreshFrequency: '5min'
 
+# show Beaufort wind scale; 'yes' or 'no'
+windscale: 'yes'
+
 # ---------------------------- END CONFIG ----------------------------
 
 exclude: "minutely,hourly,daily,alerts,flags"
 command: "echo {}"
 
 makeCommand: (apiKey, location) ->
-  "curl -sS 'https://api.darksky.net/forecast/#{apiKey}/#{location}?units=si&exclude=#{@exclude}'"
+	"curl -sS 'https://api.darksky.net/forecast/#{apiKey}/#{location}?units=si&exclude=#{@exclude}'"
 
 render: (o) -> """
 	<article id="content">
 		<div id="icon">
+		</div>
+		<div id="windscale">
 		</div>
 		<div id="left">
 		<div id="temp">
@@ -30,12 +35,12 @@ render: (o) -> """
 """
 
 afterRender: (domEl) ->
-  geolocation.getCurrentPosition (e) =>
-    coords     = e.position.coords
-    [lat, lon] = [coords.latitude, coords.longitude]
-    @command   = @makeCommand(@apiKey, "#{lat},#{lon}")
+	geolocation.getCurrentPosition (e) =>
+		coords     = e.position.coords
+		[lat, lon] = [coords.latitude, coords.longitude]
+		@command   = @makeCommand(@apiKey, "#{lat},#{lon}")
 
-    @refresh()
+		@refresh()
 
 update: (o, dom) ->
 	data = JSON.parse(o)
@@ -52,6 +57,9 @@ update: (o, dom) ->
 	$(dom).find('#condition').html(c)
 	$(dom).find('#icon')[0].innerHTML = @getIcon(data.currently)
 
+	if @windscale == 'yes'
+		$(dom).find('#windscale')[0].innerHTML = @getWind(data.currently)
+
 style: """
 	width 25%
 	bottom 3%
@@ -64,13 +72,19 @@ style: """
 		font-family Weather
 		src url(iwn.widget/icons.svg) format('svg')
 	#left
-		padding-left: 70px
+		padding-left 80px
 	#temp
 		font-size 2em
 	#condition
 		font-size 0.8em
 	#icon
 		font-size 3em
+	#windscale
+		font-size 1.5em
+		position relative
+		left -2.25em
+		top 1.75em
+	#icon, #windscale
 		vertical-align middle
 		float left
 		font-family Weather
@@ -102,10 +116,11 @@ iconMapping:
 	"wind10"              :"&#xf0c1;"
 	"wind11"              :"&#xf0c2;"
 	"wind12"              :"&#xf0c3;"
+	"none"                :""
 
 getIcon: (data) ->
 		return @iconMapping['unknown'] unless data
-		if data.icon.indexOf('cloudy') > -1
+		if data.icon.indexOf('partly-cloudy-day') > -1
 			if data.cloudCover < 0.25
 				@iconMapping["clear-day"]
 			else if data.cloudCover < 0.5
@@ -116,7 +131,7 @@ getIcon: (data) ->
 				@iconMapping["cloudy"]
 		if data.icon.indexOf('wind') > -1
 			if data.windSpeed > 32.7
-				 @iconMapping["wind12"]
+				@iconMapping["wind12"]
 			else if data.windSpeed > 28.5
 				@iconMapping["wind11"]
 			else if data.windSpeed > 24.5
@@ -137,3 +152,28 @@ getIcon: (data) ->
 				@iconMapping["wind3"]
 		else
 			@iconMapping[data.icon]
+getWind: (data) ->
+		if data.icon.indexOf('wind') > -1
+			@iconMapping["none"]
+		else if data.windSpeed > 32.7
+			@iconMapping["wind12"]
+		else if data.windSpeed > 28.5
+			@iconMapping["wind11"]
+		else if data.windSpeed > 24.5
+			@iconMapping["wind10"]
+		else if data.windSpeed > 20.8
+			@iconMapping["wind9"]
+		else if data.windSpeed > 17.2
+			@iconMapping["wind8"]
+		else if data.windSpeed > 13.9
+			@iconMapping["wind7"]
+		else if data.windSpeed > 10.8
+			@iconMapping["wind6"]
+		else if data.windSpeed > 8
+			@iconMapping["wind5"]
+		else if data.windSpeed > 5.5
+			@iconMapping["wind4"]
+		else if data.windSpeed > 3.4
+			@iconMapping["wind3"]
+		else
+			@iconMapping["none"]
