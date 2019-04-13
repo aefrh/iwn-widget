@@ -62,7 +62,7 @@ update: (o, dom) ->
 
 style: """
 	width 25%
-	bottom 3%
+	bottom 1.5em
 	left 1%
 	font-family Avenir Next LT Pro, Futura
 	font-smooth always
@@ -81,9 +81,8 @@ style: """
 		font-size 3em
 	#windscale
 		font-size 1.5em
-		position relative
-		left -2.25em
-		top 1.75em
+		position fixed
+		bottom .7em
 	#icon, #windscale
 		vertical-align middle
 		float left
