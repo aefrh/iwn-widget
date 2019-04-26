@@ -82,7 +82,7 @@ style: """
 	#windscale
 		font-size 1.5em
 		position fixed
-		bottom .7em
+		bottom .5em
 	#icon, #windscale
 		vertical-align middle
 		float left
