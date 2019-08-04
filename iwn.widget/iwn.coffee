@@ -35,6 +35,9 @@ render: (o) -> """
 """
 
 afterRender: (domEl) ->
+	if @apiKey.length != 32
+		domEl.innerHTML = '<a href="https://darksky.net/dev" style="color: red">You need an API key!</a>'
+		return
 	geolocation.getCurrentPosition (e) =>
 		coords     = e.position.coords
 		[lat, lon] = [coords.latitude, coords.longitude]
