@@ -1,7 +1,7 @@
 # ------------------------------ CONFIG ------------------------------
 
-# forecast.io api key
-apiKey: '<api-key>'
+# openweathermap.org api key
+apiKey: ''
 
 # degree units; 'c' for celsius, 'f' for fahrenheit
 unit: 'c'
@@ -12,13 +12,15 @@ refreshFrequency: '5min'
 # show Beaufort wind scale; 'yes' or 'no'
 windscale: 'yes'
 
+# language; supported languages see https://openweathermap.org/current#multi
+language: 'en'
+
 # ---------------------------- END CONFIG ----------------------------
 
-exclude: "minutely,hourly,daily,alerts,flags"
 command: "echo {}"
 
-makeCommand: (apiKey, location) ->
-	"curl -sS 'https://api.darksky.net/forecast/#{apiKey}/#{location}?units=si&exclude=#{@exclude}'"
+makeCommand: (apiKey, lat, lon, language) ->
+	"curl -sS 'https://api.openweathermap.org/data/2.5/weather?lat=#{lat}&lon=#{lon}&appid=#{apiKey}&lang=#{language}'"
 
 render: (o) -> """
 	<article id="content">
@@ -36,32 +38,32 @@ render: (o) -> """
 
 afterRender: (domEl) ->
 	if @apiKey.length != 32
-		domEl.innerHTML = '<a href="https://darksky.net/dev" style="color: red">You need an API key!</a>'
+		domEl.innerHTML = '<a href="https://openweathermap.org/appid" style="color: red">You need an API key!</a>'
 		return
 	geolocation.getCurrentPosition (e) =>
 		coords     = e.position.coords
 		[lat, lon] = [coords.latitude, coords.longitude]
-		@command   = @makeCommand(@apiKey, "#{lat},#{lon}")
+		@command   = @makeCommand(@apiKey, "#{lat}", "#{lon}", @language)
 
 		@refresh()
 
 update: (o, dom) ->
 	data = JSON.parse(o)
 
-	return unless data.currently?
-	t = data.currently.temperature
-	c = data.currently.summary
+	return unless data.main?
+	t = data.main.temp
+	c = data.weather[0].description
 
 	if @unit == 'f'
-		$(dom).find('#temp').html(Math.round(t * 9 / 5 + 32) + ' °F')
+		$(dom).find('#temp').html(Math.round((t - 273.15) * 9 / 5 + 32) + ' °F')
 	else
-		$(dom).find('#temp').html(Math.round(t) + ' °C')
+		$(dom).find('#temp').html(Math.round(t - 273.15) + ' °C')
 
 	$(dom).find('#condition').html(c)
-	$(dom).find('#icon')[0].innerHTML = @getIcon(data.currently)
+	$(dom).find('#icon')[0].innerHTML = @getIcon(data.weather[0])
 
 	if @windscale == 'yes'
-		$(dom).find('#windscale')[0].innerHTML = @getWind(data.currently)
+		$(dom).find('#windscale')[0].innerHTML = @getWind(data.wind)
 
 style: """
 	width 25%
@@ -93,89 +95,60 @@ style: """
 """
 
 iconMapping:
-	"rain"                :"&#xf019;"
-	"snow"                :"&#xf01b;"
-	"fog"                 :"&#xf014;"
-	"cloudy"              :"&#xf013;"
-	"wind"                :"&#xf050;"
-	"clear-day"           :"&#xf00d;"
-	"mostly-clear-day"    :"&#xf00c;"
-	"partly-cloudy-day"   :"&#xf002;"
-	"clear-night"         :"&#xf02e;"
-	"partly-cloudy-night" :"&#xf086;"
-	"unknown"             :"&#xf03e;"
-	"sleet"               :"&#xf0b5;"
-	"hail"                :"&#xf03e;"
-	"thunderstorm"        :"&#xf03e;"
-	"tornado"             :"&#xf03e;"
-	"wind3"               :"&#xf0ba;"
-	"wind4"               :"&#xf0bb;"
-	"wind5"               :"&#xf0bc;"
-	"wind6"               :"&#xf0bd;"
-	"wind7"               :"&#xf0be;"
-	"wind8"               :"&#xf0bf;"
-	"wind9"               :"&#xf0c0;"
-	"wind10"              :"&#xf0c1;"
-	"wind11"              :"&#xf0c2;"
-	"wind12"              :"&#xf0c3;"
-	"none"                :""
+	"unknown" :"&#xf03e;"
+	"01d"     :"&#xf00d;"
+	"01n"     :"&#xf02e;"
+	"02d"     :"&#xf00c;"
+	"02n"     :"&#xf081;"
+	"03d"     :"&#xf002;"
+	"03n"     :"&#xf031;"
+	"04d"     :"&#xf013;"
+	"04n"     :"&#xf013;"
+	"09d"     :"&#xf01a;"
+	"09n"     :"&#xf01a;"
+	"10d"     :"&#xf019;"
+	"10n"     :"&#xf019;"
+	"11d"     :"&#xf01e;"
+	"11n"     :"&#xf01e;"
+	"13d"     :"&#xf01b;"
+	"13n"     :"&#xf01b;"
+	"50d"     :"&#xf003;"
+	"50n"     :"&#xf04a;"
+	"wind3"   :"&#xf0ba;"
+	"wind4"   :"&#xf0bb;"
+	"wind5"   :"&#xf0bc;"
+	"wind6"   :"&#xf0bd;"
+	"wind7"   :"&#xf0be;"
+	"wind8"   :"&#xf0bf;"
+	"wind9"   :"&#xf0c0;"
+	"wind10"  :"&#xf0c1;"
+	"wind11"  :"&#xf0c2;"
+	"wind12"  :"&#xf0c3;"
+	"none"    :""
 
 getIcon: (data) ->
 		return @iconMapping['unknown'] unless data
-		if data.icon.indexOf('partly-cloudy-day') > -1
-			if data.cloudCover < 0.25
-				@iconMapping["clear-day"]
-			else if data.cloudCover < 0.5
-				@iconMapping["mostly-clear-day"]
-			else if data.cloudCover < 0.75
-				@iconMapping["partly-cloudy-day"]
-			else
-				@iconMapping["cloudy"]
-		if data.icon.indexOf('wind') > -1
-			if data.windSpeed > 32.7
-				@iconMapping["wind12"]
-			else if data.windSpeed > 28.5
-				@iconMapping["wind11"]
-			else if data.windSpeed > 24.5
-				@iconMapping["wind10"]
-			else if data.windSpeed > 20.8
-				@iconMapping["wind9"]
-			else if data.windSpeed > 17.2
-				@iconMapping["wind8"]
-			else if data.windSpeed > 13.9
-				@iconMapping["wind7"]
-			else if data.windSpeed > 10.8
-				@iconMapping["wind6"]
-			else if data.windSpeed > 8
-				@iconMapping["wind5"]
-			else if data.windSpeed > 5.5
-				@iconMapping["wind4"]
-			else if data.windSpeed > 3.4
-				@iconMapping["wind3"]
-		else
-			@iconMapping[data.icon]
+		@iconMapping[data.icon]
 getWind: (data) ->
-		if data.icon.indexOf('wind') > -1
-			@iconMapping["none"]
-		else if data.windSpeed > 32.7
+		if data.speed > 32.7
 			@iconMapping["wind12"]
-		else if data.windSpeed > 28.5
+		else if data.speed > 28.5
 			@iconMapping["wind11"]
-		else if data.windSpeed > 24.5
+		else if data.speed > 24.5
 			@iconMapping["wind10"]
-		else if data.windSpeed > 20.8
+		else if data.speed > 20.8
 			@iconMapping["wind9"]
-		else if data.windSpeed > 17.2
+		else if data.speed > 17.2
 			@iconMapping["wind8"]
-		else if data.windSpeed > 13.9
+		else if data.speed > 13.9
 			@iconMapping["wind7"]
-		else if data.windSpeed > 10.8
+		else if data.speed > 10.8
 			@iconMapping["wind6"]
-		else if data.windSpeed > 8
+		else if data.speed > 8
 			@iconMapping["wind5"]
-		else if data.windSpeed > 5.5
+		else if data.speed > 5.5
 			@iconMapping["wind4"]
-		else if data.windSpeed > 3.4
+		else if data.speed > 3.4
 			@iconMapping["wind3"]
 		else
 			@iconMapping["none"]
